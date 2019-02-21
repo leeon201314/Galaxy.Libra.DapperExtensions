@@ -1,4 +1,5 @@
 using Galaxy.Libra.DapperExtensions.Mapper;
+using Galaxy.Libra.DapperExtensions.Predicate;
 using Galaxy.Libra.DapperExtensions.Sql;
 using Galaxy.Libra.DapperExtensions.Test.Entity;
 using System.Collections.Generic;

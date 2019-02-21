@@ -7,6 +7,7 @@ using System.Text;
 using Dapper;
 using Galaxy.Libra.DapperExtensions.Mapper;
 using Galaxy.Libra.DapperExtensions.Sql;
+using Galaxy.Libra.DapperExtensions.Predicate;
 
 namespace Galaxy.Libra.DapperExtensions
 {

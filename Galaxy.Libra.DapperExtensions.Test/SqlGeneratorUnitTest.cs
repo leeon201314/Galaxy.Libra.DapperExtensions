@@ -1,4 +1,5 @@
 ﻿using Galaxy.Libra.DapperExtensions.Mapper;
+using Galaxy.Libra.DapperExtensions.Predicate;
 using Galaxy.Libra.DapperExtensions.Sql;
 using Galaxy.Libra.DapperExtensions.Test.Entity;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace Galaxy.Libra.DapperExtensions.Test
 
             IFieldPredicate nameFieldPredicate = Predicates.Field<User>(p => p.Name, Operator.Like, "不知道%");
             List<ISort> sortList = new List<ISort>();
-            sortList.Add(new Sort() { PropertyName = "Name", Ascending = true });
+            sortList.Add(Predicates.Sort<User>(u => u.Id));
             string selectPagedSql = sqlGeneratorImpl.SelectPaged(new UserMapper(), nameFieldPredicate, sortList, 20, 2, new Dictionary<string, object>());
-            string res = "SELECT `User`.`Id`, `User`.`Name`, `User`.`Psw`, `User`.`RoleId` FROM `User` WHERE (`User`.`Name` LIKE @Name_0) ORDER BY `User`.`Name` ASC LIMIT @firstResult, @maxResults";
+            string res = "SELECT `User`.`Id`, `User`.`Name`, `User`.`Psw`, `User`.`RoleId` FROM `User` WHERE (`User`.`Name` LIKE @Name_0) ORDER BY `User`.`Id` ASC LIMIT @firstResult, @maxResults";
             Assert.Equal(selectPagedSql, res);
         }
     }

@@ -61,7 +61,7 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
 }
 ```
 #### 基于Predicate查询
-```
+```c#
 using (SqlConnection cn = new SqlConnection(_connectionString))
 {
     cn.Open();
@@ -70,9 +70,7 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
     cn.Close();
 }
 ```   
-### 查询
-
-#### 构建查询条件（基于MySQL）
+##### 构建查询条件（基于MySQL）
 * 简单查询，包括大于，等于，Like等，生成：(`User`.`Name` LIKE @Name_0)
 ```c#
 Predicates.Field<User>(p => p.Name, Operator.Like, "李%");

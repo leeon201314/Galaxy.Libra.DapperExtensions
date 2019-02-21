@@ -21,6 +21,11 @@ namespace Galaxy.Libra.DapperExtensions.Test
             string namesql = nameFieldPredicate.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
             Assert.Equal("(`User`.`Name` LIKE @Name_0)", namesql);
 
+            List<string> valueList = new List<string>() { "1", "2", "3" };
+            IFieldPredicate nameFieldPredicate2 = Predicates.Field<User>(p => p.Name, Operator.Eq, valueList);
+            string namesql2 = nameFieldPredicate2.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
+            Assert.Equal("(`User`.`Name` IN (@Name_0, @Name_1, @Name_2))", namesql2);
+
             IBetweenPredicate idFieldPredicate = Predicates.Between<User>(p => p.Name, new BetweenValues { Value1 = 1, Value2 = 10 }, true);
             string idsql = idFieldPredicate.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
             Assert.Equal("(`User`.`Name` NOT BETWEEN @Name_0 AND @Name_1)", idsql);

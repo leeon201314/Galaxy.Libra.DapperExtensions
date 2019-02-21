@@ -1,5 +1,6 @@
 # Galaxy.Libra.DapperExtensions
 一个轻量的Dapper扩展库，基于netcore,支持MySQL,SQLServer等多种常用数据库。
+基于[Dapper-Extensions](https://github.com/tmsmith/Dapper-Extensions)优化。
 
 ## 例子
 
@@ -14,6 +15,61 @@ public class User
      public string Psw { get; set; }
 }
 ```
+### 基本使用
+
+#### 插入
+```
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    User user = new User { Name = "波多野结衣" , Psw = "123"};
+    int id = cn.Insert(user);
+    cn.Close();
+}
+```
+#### 更新
+```
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    int id = 1;
+    User user = cn.Get<User>(id);
+    user.Name = "林志玲";
+    cn.Update(user);
+    cn.Close();
+}
+```
+#### 删除
+```
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    int id = 1;
+    User user = cn.Get<User>(id);
+    cn.Delete(user);
+    cn.Close();
+}
+```
+#### 基于ID查询
+```
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    int Id = 1;
+    Person person = cn.Get<User>(Id);	
+    cn.Close();
+}
+```
+#### 基于Predicate查询
+```
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    var predicate = Predicates.Field<User>(p => p.Name, Operator.Like, "李%");
+    IEnumerable<User> list = cn.GetList<User>(predicate);	
+    cn.Close();
+}
+```   
 ### 查询
 
 #### 构建查询条件（基于MySQL）

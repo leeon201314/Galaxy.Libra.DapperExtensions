@@ -63,9 +63,9 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         public PropertyInfo PropertyInfo { get; private set; }
 
         /// <summary>
-        /// Fluently sets the column name for the property.
+        /// 设置属性对应的数据表列名
         /// </summary>
-        /// <param name="columnName">The column name as it exists in the database.</param>
+        /// <param name="columnName">数据表列名</param>
         public PropertyMap Column(string columnName)
         {
             ColumnName = columnName;
@@ -93,7 +93,7 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         }
 
         /// <summary>
-        /// Fluently sets the ignore status of the property.
+        /// 设置忽略该属性。
         /// </summary>
         public PropertyMap Ignore()
         {

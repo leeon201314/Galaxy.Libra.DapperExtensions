@@ -74,9 +74,7 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
 
 #### 构建查询条件（基于MySQL）
 * 简单查询，包括大于，等于，Like等，生成：(`User`.`Name` LIKE @Name_0)
-``` 
-Predicates.Field<User>(p => p.Name, Operator.Like, "李%");
-``` 
+> Predicates.Field<User>(p => p.Name, Operator.Like, "李%");
 * in查询，生成：(`User`.`Name` IN (@Name_0, @Name_1, @Name_2))
 ```
 List<string> valueList = new List<string>() { "1", "2", "3" };

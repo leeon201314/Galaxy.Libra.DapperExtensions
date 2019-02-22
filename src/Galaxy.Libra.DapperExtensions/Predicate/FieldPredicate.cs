@@ -36,7 +36,7 @@ namespace Galaxy.Libra.DapperExtensions.Predicate
                 }
 
                 string paramStrings = @params.Aggregate(new StringBuilder(), (sb, s) => sb.Append((sb.Length != 0 ? ", " : string.Empty) + s), sb => sb.ToString());
-                return $"({columnName} {NotStr}IN ({paramStrings})";
+                return $"({columnName} {NotStr}IN ({paramStrings}))";
             }
 
             string parameterName = parameters.SetParameterName(this.PropertyName, this.Value, sqlGenerator.Configuration.Dialect.ParameterPrefix);

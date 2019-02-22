@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Authors>leeon</Authors>
+    <Description>一个轻量的dapper扩展库</Description>
+    <Copyright>leeon</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

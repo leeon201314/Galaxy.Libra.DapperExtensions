@@ -17,7 +17,7 @@ namespace Galaxy.Libra.DapperExtensions.Test
             IDapperExtensionsConfiguration conf = new DapperExtensionsConfiguration(typeof(AutoClassMapper<>), new List<Assembly>(), new MySqlDialect());
             SqlGeneratorImpl sqlGeneratorImpl = new SqlGeneratorImpl(conf);
 
-            IFieldPredicate nameFieldPredicate = Predicates.Field<User>(p => p.Name, Operator.Like, "不知道%");
+            IFieldPredicate nameFieldPredicate = Predicates.Field<User>(p => p.Name, Operator.Like, "张%");
             string namesql = nameFieldPredicate.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
             Assert.Equal("(`User`.`Name` LIKE @Name_0)", namesql);
 
@@ -38,14 +38,10 @@ namespace Galaxy.Libra.DapperExtensions.Test
             string existssql = existsPredicate.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
             Assert.Equal("(NOT EXISTS (SELECT 1 FROM `User` WHERE (`User`.`Name` LIKE @Name_0)))", existssql);
 
-            IList<IPredicate> predList = new List<IPredicate>();
-            predList.Add(nameFieldPredicate);
-            predList.Add(idFieldPredicate);
+            IList<IPredicate> predList = new List<IPredicate> { nameFieldPredicate, idFieldPredicate };
             IPredicateGroup predGroup1 = Predicates.Group(GroupOperator.And, predList.ToArray());
 
-            IList<IPredicate> predList2 = new List<IPredicate>();
-            predList2.Add(predGroup1);
-            predList2.Add(existsPredicate);
+            IList<IPredicate> predList2 = new List<IPredicate> { predGroup1, existsPredicate };
             IPredicateGroup predGroup2 = Predicates.Group(GroupOperator.Or, predList2.ToArray());
             string groupsql = predGroup2.GetSql(sqlGeneratorImpl, new Dictionary<string, object>());
             string res = "(((`User`.`Name` LIKE @Name_0) AND (`User`.`Name` NOT BETWEEN @Name_1 AND @Name_2)) OR (NOT EXISTS (SELECT 1 FROM `User` WHERE (`User`.`Name` LIKE @Name_3))))";

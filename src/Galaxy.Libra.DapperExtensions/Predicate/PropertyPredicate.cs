@@ -18,7 +18,8 @@ namespace Galaxy.Libra.DapperExtensions.Predicate
         {
             string columnName = GetColumnName(typeof(T), sqlGenerator, PropertyName);
             string columnName2 = GetColumnName(typeof(T2), sqlGenerator, PropertyName2);
-            return string.Format("({0} {1} {2})", columnName, GetOperatorString(), columnName2);
+            string operatorString = GetOperatorString();
+            return $"({columnName} {operatorString} {columnName2})";
         }
     }
 }

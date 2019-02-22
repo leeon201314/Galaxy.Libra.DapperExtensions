@@ -25,15 +25,11 @@ namespace Galaxy.Libra.DapperExtensions.Predicate
         {
             IClassMapper map = sqlGenerator.Configuration.GetMap(entityType);
             if (map == null)
-            {
-                throw new NullReferenceException(string.Format("Map was not found for {0}", entityType));
-            }
+                throw new NullReferenceException($"{entityType}找不到ClassMap映射文件");
 
             IPropertyMap propertyMap = map.Properties.SingleOrDefault(p => p.Name == propertyName);
             if (propertyMap == null)
-            {
-                throw new NullReferenceException(string.Format("{0} was not found for {1}", propertyName, entityType));
-            }
+                throw new NullReferenceException($"{entityType}找不到属性{propertyName}");
 
             return sqlGenerator.GetColumnName(map, propertyMap, false);
         }

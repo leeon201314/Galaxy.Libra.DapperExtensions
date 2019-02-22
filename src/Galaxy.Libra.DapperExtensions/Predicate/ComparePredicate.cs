@@ -10,6 +10,13 @@
     {
         public Operator Operator { get; set; }
         public bool Not { get; set; }
+        public string NotStr
+        {
+            get
+            {
+                return Not ? "NOT " : string.Empty;
+            }
+        }
 
         public virtual string GetOperatorString()
         {
@@ -32,7 +39,7 @@
     }
 
     /// <summary>
-    /// Comparison operator for predicates.
+    /// 操作符。
     /// </summary>
     public enum Operator
     {

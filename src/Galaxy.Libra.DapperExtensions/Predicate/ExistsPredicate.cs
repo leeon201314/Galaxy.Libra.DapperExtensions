@@ -20,20 +20,18 @@ namespace Galaxy.Libra.DapperExtensions.Predicate
         public string GetSql(ISqlGenerator sqlGenerator, IDictionary<string, object> parameters)
         {
             IClassMapper mapSub = GetClassMapper(typeof(TSub), sqlGenerator.Configuration);
-            string sql = string.Format("({0}EXISTS (SELECT 1 FROM {1} WHERE {2}))",
-                Not ? "NOT " : string.Empty,
-                sqlGenerator.GetTableName(mapSub),
-                Predicate.GetSql(sqlGenerator, parameters));
-            return sql;
+            string notStr = Not ? "NOT " : string.Empty;
+            string tableName = sqlGenerator.GetTableName(mapSub);
+            string predicateSql = Predicate.GetSql(sqlGenerator, parameters);
+            return $"({notStr}EXISTS (SELECT 1 FROM {tableName} WHERE {predicateSql}))";
         }
 
         protected virtual IClassMapper GetClassMapper(Type type, IDapperExtensionsConfiguration configuration)
         {
             IClassMapper map = configuration.GetMap(type);
+
             if (map == null)
-            {
-                throw new NullReferenceException(string.Format("Map was not found for {0}", type));
-            }
+                throw new NullReferenceException($"{type}找不到ClassMap映射文件");
 
             return map;
         }

@@ -7,18 +7,18 @@ using System.Linq.Expressions;
 
 namespace Galaxy.Libra.DapperExtensions.PredicateConver
 {
-    public class ExpressionPredicateConver
+    public class ExpressionPredicateConvert
     {
         /// <summary>
         /// 将表达式转换为Predicate
         /// </summary>
-        public static IPredicate GetExpressionPredicate<T>(IClassMapper classMap, Expression<Func<T, bool>> expression) where T : class
+        public static IPredicate GetExpressionPredicate<T>(Expression<Func<T, bool>> expression) where T : class
         {
             Expression expr = expression.Body;
             return ConvertToPredicate<T>(expr);
         }
 
-        public static IPredicate ConvertToPredicate<T>(Expression expr) where T : class
+        private static IPredicate ConvertToPredicate<T>(Expression expr) where T : class
         {
             if (expr.NodeType == ExpressionType.OrElse || expr.NodeType == ExpressionType.AndAlso)
             {

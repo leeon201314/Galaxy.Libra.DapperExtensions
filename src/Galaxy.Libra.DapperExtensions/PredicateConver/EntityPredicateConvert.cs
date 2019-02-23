@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Galaxy.Libra.DapperExtensions.PredicateConver
 {
-    public class EntityPredicateConver
+    public class EntityPredicateConvert
     {
         public static IPredicate GetEntityPredicate(IClassMapper classMap, object entity)
         {

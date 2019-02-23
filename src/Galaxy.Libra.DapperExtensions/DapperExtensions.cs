@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Galaxy.Libra.DapperExtensions.Sql;
+﻿using Galaxy.Libra.DapperExtensions.DapperImpl;
 using Galaxy.Libra.DapperExtensions.Mapper;
 using Galaxy.Libra.DapperExtensions.Predicate;
-using Galaxy.Libra.DapperExtensions.DapperImpl;
+using Galaxy.Libra.DapperExtensions.Sql;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Galaxy.Libra.DapperExtensions
 {
@@ -186,11 +185,27 @@ namespace Galaxy.Libra.DapperExtensions
         }
 
         /// <summary>
+        /// 使用表达式进行删除
+        /// </summary>
+        public static bool Delete<T>(this IDbConnection connection, Expression<Func<T, bool>> expression, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            return Instance.Delete<T>(connection, expression, transaction, commandTimeout);
+        }
+
+        /// <summary>
         /// Executes a select query using the specified predicate, returning an IEnumerable data typed as per T.
         /// </summary>
         public static IEnumerable<T> GetList<T>(this IDbConnection connection, object predicate = null, IList<ISort> sort = null, IDbTransaction transaction = null, int? commandTimeout = null, bool buffered = false) where T : class
         {
             return Instance.GetList<T>(connection, predicate, sort, transaction, commandTimeout, buffered);
+        }
+
+        /// <summary>
+        /// 使用表达式进行查找列表
+        /// </summary>
+        public static IEnumerable<T> GetList<T>(this IDbConnection connection, Expression<Func<T, bool>> expression, IList<ISort> sort = null, IDbTransaction transaction = null, int? commandTimeout = null, bool buffered = false) where T : class
+        {
+            return Instance.GetList<T>(connection, expression, sort, transaction, commandTimeout, buffered);
         }
 
         /// <summary>
@@ -200,6 +215,14 @@ namespace Galaxy.Libra.DapperExtensions
         public static IEnumerable<T> GetPage<T>(this IDbConnection connection, object predicate, IList<ISort> sort, int page, int resultsPerPage, IDbTransaction transaction = null, int? commandTimeout = null, bool buffered = false) where T : class
         {
             return Instance.GetPage<T>(connection, predicate, sort, page, resultsPerPage, transaction, commandTimeout, buffered);
+        }
+
+        /// <summary>
+        /// 使用表达式进行分页查找
+        /// </summary>
+        public static IEnumerable<T> GetPage<T>(this IDbConnection connection, Expression<Func<T, bool>> expression, IList<ISort> sort, int page, int resultsPerPage, IDbTransaction transaction = null, int? commandTimeout = null, bool buffered = false) where T : class
+        {
+            return Instance.GetPage<T>(connection, expression, sort, page, resultsPerPage, transaction, commandTimeout, buffered);
         }
 
         /// <summary>

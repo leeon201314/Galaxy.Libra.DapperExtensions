@@ -135,8 +135,6 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
                     Value = paramStr
                 };
             }
-
-            return null;
         }
     }
 }

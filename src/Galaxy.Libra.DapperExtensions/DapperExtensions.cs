@@ -242,6 +242,11 @@ namespace Galaxy.Libra.DapperExtensions
             return Instance.Count<T>(connection, predicate, transaction, commandTimeout);
         }
 
+        public static int Count<T>(this IDbConnection connection, Expression<Func<T, bool>> expression, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            return Instance.Count<T>(connection, expression, transaction, commandTimeout);
+        }
+
         /// <summary>
         /// Executes a select query for multiple objects, returning IMultipleResultReader for each predicate.
         /// </summary>

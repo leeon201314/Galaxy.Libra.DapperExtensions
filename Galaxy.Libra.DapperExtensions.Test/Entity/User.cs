@@ -19,7 +19,8 @@ namespace Galaxy.Libra.DapperExtensions.Test.Entity
     {
         public UserMapper()
         {
-            Table("User");
+            Table("UserTest");
+            Map(p => p.Id).Key(KeyType.Assigned);
             Map(p => p.Role).Ignore();
             AutoMap();
         }

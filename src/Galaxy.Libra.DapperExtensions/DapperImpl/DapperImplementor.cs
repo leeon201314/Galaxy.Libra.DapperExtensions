@@ -8,26 +8,11 @@ using Dapper;
 using Galaxy.Libra.DapperExtensions.Mapper;
 using Galaxy.Libra.DapperExtensions.Sql;
 using Galaxy.Libra.DapperExtensions.Predicate;
+using Galaxy.Libra.DapperExtensions.PredicateConver;
 
-namespace Galaxy.Libra.DapperExtensions
+namespace Galaxy.Libra.DapperExtensions.DapperImpl
 {
-    public interface IDapperImplementor
-    {
-        ISqlGenerator SqlGenerator { get; }
-        T Get<T>(IDbConnection connection, dynamic id, IDbTransaction transaction, int? commandTimeout) where T : class;
-        void Insert<T>(IDbConnection connection, IEnumerable<T> entities, IDbTransaction transaction, int? commandTimeout) where T : class;
-        dynamic Insert<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class;
-        bool Update<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class;
-        bool Delete<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class;
-        bool Delete<T>(IDbConnection connection, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
-        IEnumerable<T> GetList<T>(IDbConnection connection, object predicate, IList<ISort> sort, IDbTransaction transaction, int? commandTimeout, bool buffered) where T : class;        
-        IEnumerable<T> GetPage<T>(IDbConnection connection, object predicate, IList<ISort> sort, int page, int resultsPerPage, IDbTransaction transaction, int? commandTimeout, bool buffered) where T : class;
-        IEnumerable<T> GetSet<T>(IDbConnection connection, object predicate, IList<ISort> sort, int firstResult, int maxResults, IDbTransaction transaction, int? commandTimeout, bool buffered) where T : class;
-        int Count<T>(IDbConnection connection, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
-        IMultipleResultReader GetMultiple(IDbConnection connection, GetMultiplePredicate predicate, IDbTransaction transaction, int? commandTimeout);
-    }
-
-    public class DapperImplementor : IDapperImplementor
+    public partial class DapperImplementor : IDapperImplementor
     {
         public DapperImplementor(ISqlGenerator sqlGenerator)
         {
@@ -42,82 +27,6 @@ namespace Galaxy.Libra.DapperExtensions
             IPredicate predicate = GetIdPredicate(classMap, id);
             T result = GetList<T>(connection, classMap, predicate, null, transaction, commandTimeout, true).SingleOrDefault();
             return result;
-        }
-
-        public void Insert<T>(IDbConnection connection, IEnumerable<T> entities, IDbTransaction transaction, int? commandTimeout) where T : class
-        {
-            IClassMapper classMap = SqlGenerator.Configuration.GetMap<T>();
-            var properties = classMap.Properties.Where(p => p.KeyType != KeyType.NotAKey);
-
-            foreach (var e in entities)
-            {
-                foreach (var column in properties)
-                {
-                    if (column.KeyType == KeyType.Guid)
-                    {
-                        Guid comb = SqlGenerator.Configuration.GetNextGuid();
-                        column.PropertyInfo.SetValue(e, comb, null);
-                    }
-                }
-            }
-
-            string sql = SqlGenerator.Insert(classMap);
-
-            connection.Execute(sql, entities, transaction, commandTimeout, CommandType.Text);
-        }
-
-        public dynamic Insert<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class
-        {
-            IClassMapper classMap = SqlGenerator.Configuration.GetMap<T>();
-            List<IPropertyMap> nonIdentityKeyProperties = classMap.Properties.Where(p => p.KeyType == KeyType.Guid || p.KeyType == KeyType.Assigned).ToList();
-            var identityColumn = classMap.Properties.SingleOrDefault(p => p.KeyType == KeyType.Identity);
-            foreach (var column in nonIdentityKeyProperties)
-            {
-                if (column.KeyType == KeyType.Guid)
-                {
-                    Guid comb = SqlGenerator.Configuration.GetNextGuid();
-                    column.PropertyInfo.SetValue(entity, comb, null);
-                }
-            }
-
-            IDictionary<string, object> keyValues = new ExpandoObject();
-            string sql = SqlGenerator.Insert(classMap);
-            if (identityColumn != null)
-            {
-                IEnumerable<long> result;
-                if (SqlGenerator.SupportsMultipleStatements())
-                {
-                    sql += SqlGenerator.Configuration.Dialect.BatchSeperator + SqlGenerator.IdentitySql(classMap);
-                    result = connection.Query<long>(sql, entity, transaction, false, commandTimeout, CommandType.Text);
-                }
-                else
-                {
-                    connection.Execute(sql, entity, transaction, commandTimeout, CommandType.Text);
-                    sql = SqlGenerator.IdentitySql(classMap);
-                    result = connection.Query<long>(sql, entity, transaction, false, commandTimeout, CommandType.Text);
-                }
-
-                long identityValue = result.First();
-                int identityInt = Convert.ToInt32(identityValue);
-                keyValues.Add(identityColumn.Name, identityInt);
-                identityColumn.PropertyInfo.SetValue(entity, identityInt, null);
-            }
-            else
-            {
-                connection.Execute(sql, entity, transaction, commandTimeout, CommandType.Text);
-            }
-
-            foreach (var column in nonIdentityKeyProperties)
-            {
-                keyValues.Add(column.Name, column.PropertyInfo.GetValue(entity, null));
-            }
-
-            if (keyValues.Count == 1)
-            {
-                return keyValues.First().Value;
-            }
-
-            return keyValues;
         }
 
         public bool Update<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class
@@ -140,20 +49,6 @@ namespace Galaxy.Libra.DapperExtensions
             }
 
             return connection.Execute(sql, dynamicParameters, transaction, commandTimeout, CommandType.Text) > 0;
-        }
-
-        public bool Delete<T>(IDbConnection connection, T entity, IDbTransaction transaction, int? commandTimeout) where T : class
-        {
-            IClassMapper classMap = SqlGenerator.Configuration.GetMap<T>();
-            IPredicate predicate = GetKeyPredicate<T>(classMap, entity);
-            return Delete<T>(connection, classMap, predicate, transaction, commandTimeout);
-        }
-
-        public bool Delete<T>(IDbConnection connection, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class
-        {
-            IClassMapper classMap = SqlGenerator.Configuration.GetMap<T>();
-            IPredicate wherePredicate = GetPredicate(classMap, predicate);
-            return Delete<T>(connection, classMap, wherePredicate, transaction, commandTimeout);
         }
 
         public IEnumerable<T> GetList<T>(IDbConnection connection, object predicate, IList<ISort> sort, IDbTransaction transaction, int? commandTimeout, bool buffered) where T : class
@@ -259,7 +154,7 @@ namespace Galaxy.Libra.DapperExtensions
             IPredicate wherePredicate = predicate as IPredicate;
             if (wherePredicate == null && predicate != null)
             {
-                wherePredicate = GetEntityPredicate(classMap, predicate);
+                wherePredicate = EntityPredicateConver.GetEntityPredicate(classMap, predicate);
             }
 
             return wherePredicate;
@@ -327,29 +222,6 @@ namespace Galaxy.Libra.DapperExtensions
                                  Operator = GroupOperator.And,
                                  Predicates = predicates
                              };
-        }
-
-        protected IPredicate GetEntityPredicate(IClassMapper classMap, object entity)
-        {
-            Type predicateType = typeof(FieldPredicate<>).MakeGenericType(classMap.EntityType);
-            IList<IPredicate> predicates = new List<IPredicate>();
-            foreach (var kvp in ReflectionHelper.GetObjectValues(entity))
-            {
-                IFieldPredicate fieldPredicate = Activator.CreateInstance(predicateType) as IFieldPredicate;
-                fieldPredicate.Not = false;
-                fieldPredicate.Operator = Operator.Eq;
-                fieldPredicate.PropertyName = kvp.Key;
-                fieldPredicate.Value = kvp.Value;
-                predicates.Add(fieldPredicate);
-            }
-
-            return predicates.Count == 1
-                       ? predicates[0]
-                       : new PredicateGroup
-                       {
-                           Operator = GroupOperator.And,
-                           Predicates = predicates
-                       };
         }
 
         protected GridReaderResultReader GetMultipleByBatch(IDbConnection connection, GetMultiplePredicate predicate, IDbTransaction transaction, int? commandTimeout)

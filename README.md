@@ -60,6 +60,15 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
     cn.Close();
 }
 ```
+#### 基于动态对象查询
+```c#
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    Person person = cn.Get<User>(new { Name = "波多野结衣" , Psw = "123"});	
+    cn.Close();
+}
+```
 #### 基于表达式查询
 ```c#
 using (SqlConnection cn = new SqlConnection(_connectionString))

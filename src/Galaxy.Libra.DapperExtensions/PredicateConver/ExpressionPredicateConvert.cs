@@ -1,5 +1,4 @@
-﻿using Galaxy.Libra.DapperExtensions.Mapper;
-using Galaxy.Libra.DapperExtensions.Predicate;
+﻿using Galaxy.Libra.DapperExtensions.Predicate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +35,10 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
             else if (expr.NodeType == ExpressionType.Call)
             {
                 return ConverCallExpression<T>(expr);
+            }
+            else if(expr.NodeType == ExpressionType.Not)
+            {
+                return ConverNotInExpression<T>(expr);
             }
 
             return null;
@@ -135,6 +138,14 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
                     Value = paramStr
                 };
             }
+        }
+
+        private static IPredicate ConverNotInExpression<T>(Expression expr) where T : class
+        {
+            UnaryExpression tempExpr = expr as UnaryExpression;
+            IPredicate predicate = ConverCallExpression<T>(tempExpr.Operand);
+            (predicate as FieldPredicate<T>).Not = true;
+            return predicate;
         }
     }
 }

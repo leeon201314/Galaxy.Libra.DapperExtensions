@@ -50,6 +50,10 @@ namespace Galaxy.Libra.DapperExtensions.Test
             FieldPredicate<User> f = p as FieldPredicate<User>;
             Assert.True(f.Operator == Operator.Eq);
             Assert.True((f.Value as List<string>).Count == 3);
+
+            IPredicate p2 = ExpressionPredicateConvert.GetExpressionPredicate<User>(u => !valueList.Contains(u.Name));
+            FieldPredicate<User> f2 = p2 as FieldPredicate<User>;
+            Assert.True(f.Not == true);
         }
 
         [Fact]
@@ -60,18 +64,6 @@ namespace Galaxy.Libra.DapperExtensions.Test
             Assert.True(System.Convert.ToInt32(f.Value) == 1);
             Assert.True((p as IPredicateGroup).Operator == GroupOperator.Or);
             Expression<Func<User, bool>> expr = u => u.Id == 1 || (u.Id == 2 && u.Name.Contains("1"));
-            GetPredicate(expr);
-        }
-
-        protected IPredicate GetPredicate(object predicate)
-        {
-            IPredicate wherePredicate = predicate as IPredicate;
-            if (wherePredicate == null && predicate != null)
-            {
-
-            }
-
-            return wherePredicate;
         }
     }
 }

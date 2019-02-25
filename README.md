@@ -72,7 +72,7 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
     
     List<string> valueList = new List<string>() { "1", "2", "3" };
     person = cn.Get<User>(u => valueList.Contains(u.Name));	//in查询
-    person = cn.Get<User>(!u => valueList.Contains(u.Name)); //not in查询
+    person = cn.Get<User>(u => !valueList.Contains(u.Name)); //not in查询
     
     person = cn.Get<User>(u => u.Id == 1 || (u.Id == 2 && u.Name.Contains("1"))); //复合查询
     cn.Close();

@@ -65,7 +65,7 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
 using (SqlConnection cn = new SqlConnection(_connectionString))
 {
     cn.Open();
-    Person person = cn.Get<User>(new { Name = "波多野结衣" , Psw = "123"});	
+    Person person = cn.GetList<User>(new { Name = "波多野结衣" , Psw = "123"});	
     cn.Close();
 }
 ```
@@ -75,15 +75,15 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
 {
     cn.Open();
     Person person = cn.Get<User>(u => u.Id != 1);
-    person = cn.Get<User>(u => u.Name.Contains("1"));	//Like查询
-    person = cn.Get<User>(u => u.Name.StartsWith("1")); //Like查询
-    person = cn.Get<User>(u => u.Name.EndsWith("1"));	//Like查询
+    person = cn.GetList<User>(u => u.Name.Contains("1"));	//Like查询
+    person = cn.GetList<User>(u => u.Name.StartsWith("1")); //Like查询
+    person = cn.GetList<User>(u => u.Name.EndsWith("1"));	//Like查询
     
     List<string> valueList = new List<string>() { "1", "2", "3" };
-    person = cn.Get<User>(u => valueList.Contains(u.Name));	//in查询
-    person = cn.Get<User>(u => !valueList.Contains(u.Name)); //not in查询
+    person = cn.GetList<User>(u => valueList.Contains(u.Name));	//in查询
+    person = cn.GetList<User>(u => !valueList.Contains(u.Name)); //not in查询
     
-    person = cn.Get<User>(u => u.Id == 1 || (u.Id == 2 && u.Name.Contains("1"))); //复合查询
+    person = cn.GetList<User>(u => u.Id == 1 || (u.Id == 2 && u.Name.Contains("1"))); //复合查询
     cn.Close();
 }
 ```

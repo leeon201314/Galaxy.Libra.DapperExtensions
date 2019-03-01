@@ -60,6 +60,33 @@ using (SqlConnection cn = new SqlConnection(_connectionString))
     cn.Close();
 }
 ```
+#### 基于动态对象查询
+```c#
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    Person person = cn.GetList<User>(new { Name = "波多野结衣" , Psw = "123"});	
+    cn.Close();
+}
+```
+#### 基于表达式查询
+```c#
+using (SqlConnection cn = new SqlConnection(_connectionString))
+{
+    cn.Open();
+    Person person = cn.Get<User>(u => u.Id != 1);
+    person = cn.GetList<User>(u => u.Name.Contains("1"));	//Like查询
+    person = cn.GetList<User>(u => u.Name.StartsWith("1")); //Like查询
+    person = cn.GetList<User>(u => u.Name.EndsWith("1"));	//Like查询
+    
+    List<string> valueList = new List<string>() { "1", "2", "3" };
+    person = cn.GetList<User>(u => valueList.Contains(u.Name));	//in查询
+    person = cn.GetList<User>(u => !valueList.Contains(u.Name)); //not in查询
+    
+    person = cn.GetList<User>(u => u.Id == 1 || (u.Id == 2 && u.Name.Contains("1"))); //复合查询
+    cn.Close();
+}
+```
 #### 基于Predicate查询
 ```c#
 using (SqlConnection cn = new SqlConnection(_connectionString))

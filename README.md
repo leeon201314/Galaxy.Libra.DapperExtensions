@@ -1,6 +1,6 @@
 # Galaxy.Libra.DapperExtensions
 一个轻量的Dapper扩展库，基于netcore,支持MySQL,SQLServer等多种常用数据库。
-基于[Dapper-Extensions](https://github.com/tmsmith/Dapper-Extensions)优化。
+基于[Dapper-Extensions](https://github.com/tmsmith/Dapper-Extensions)优化,并加入了建库，建表的功能。
 
 ## 例子
 

@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DBBuilder\MySQL\Convert\ve-9C9E.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.7" />
   </ItemGroup>
 

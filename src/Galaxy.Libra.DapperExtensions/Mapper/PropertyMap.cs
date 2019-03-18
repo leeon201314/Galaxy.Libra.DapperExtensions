@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Galaxy.Libra.DapperExtensions.Mapper
@@ -14,6 +12,22 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         string ColumnName { get; }
         bool Ignored { get; }
         bool IsReadOnly { get; }
+
+        /// <summary>
+        /// 字段长度
+        /// </summary>
+        int ColumnLength { get; }
+
+        /// <summary>
+        /// 是否允许为空
+        /// </summary>
+        bool IsRequired { get; }
+
+        /// <summary>
+        /// 是否自增字段
+        /// </summary>
+        bool IsAutoIncrement { get; }
+
         KeyType KeyType { get; }
         PropertyInfo PropertyInfo { get; }
     }
@@ -56,6 +70,15 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         /// Gets the read-only status of the current property. If read-only, the current property will not be included in INSERT and UPDATE queries.
         /// </summary>
         public bool IsReadOnly { get; private set; }
+
+        public bool IsRequired { get; private set; }
+
+        public bool IsAutoIncrement { get; private set; }
+
+        /// <summary>
+        /// 设置字段长度
+        /// </summary>
+        public int ColumnLength { get; private set; }
 
         /// <summary>
         /// Gets the property info for the current property.
@@ -106,6 +129,18 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
             return this;
         }
 
+        public PropertyMap Required()
+        {
+            IsRequired = true;
+            return this;
+        }
+
+        public PropertyMap AutoIncrement()
+        {
+            IsAutoIncrement = true;
+            return this;
+        }
+
         /// <summary>
         /// Fluently sets the read-only status of the property.
         /// </summary>
@@ -117,6 +152,15 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
             }
 
             IsReadOnly = true;
+            return this;
+        }
+
+        /// <summary>
+        /// 设置字段长度
+        /// </summary>
+        public PropertyMap Length(int length)
+        {
+            ColumnLength = length;
             return this;
         }
     }

@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Galaxy.Libra.DapperExtensions\Galaxy.Libra.DapperExtensions.csproj" />
+    <ProjectReference Include="..\Galaxy.Libra.DapperExtensions\Galaxy.Libra.DapperExtensions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,6 +18,7 @@ namespace Galaxy.Libra.DapperExtensions.Test.Entity
             Table("TestTable");
             Map(p => p.Id).Key(KeyType.Identity).AutoIncrement();
             Map(p => p.TestInt).Length(4).Column("Test").Required();
+            Map(p => p.Name).Length(30).Required();
             AutoMap();
         }
     }

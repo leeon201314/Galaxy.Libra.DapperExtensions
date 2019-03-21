@@ -109,8 +109,8 @@ namespace Galaxy.Libra.DapperExtensions.DBBuilder.MySQL
             if (proMap.IsAutoIncrement)
                 columnStrBuilder.Append("  AUTO_INCREMENT");
 
-            if (proMap.IsRequired)
-                uniquekey.Add(columnName);
+            //if (proMap.)
+            //    uniquekey.Add(columnName);
 
             columnList.Add(columnStrBuilder.ToString());
 

@@ -2,6 +2,8 @@
 一个轻量的Dapper扩展库，基于netcore,支持MySQL,SQLServer等多种常用数据库。
 基于[Dapper-Extensions](https://github.com/tmsmith/Dapper-Extensions)优化,并加入了建库，建表的功能。
 
+欢迎会开发的您一起加入，完善本项目，QQ：499053596
+
 ## 例子
 
 ### 定义一个实体类

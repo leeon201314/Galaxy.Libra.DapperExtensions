@@ -36,7 +36,7 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
             {
                 return ConverCallExpression<T>(expr);
             }
-            else if(expr.NodeType == ExpressionType.Not)
+            else if (expr.NodeType == ExpressionType.Not)
             {
                 return ConverNotInExpression<T>(expr);
             }
@@ -50,7 +50,7 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
             MemberExpression menLeftExpr = binExpr.Left as MemberExpression;
             ConstantExpression conRightExpr = binExpr.Right as ConstantExpression;
 
-            if (menLeftExpr != null && conRightExpr != null)
+            if (menLeftExpr != null)
             {
                 Operator op = Operator.Eq;
                 bool not = false;
@@ -85,8 +85,36 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
                     PropertyName = menLeftExpr.Member.Name,
                     Operator = op,
                     Not = not,
-                    Value = conRightExpr.Value
+                    Value = GetExpressionValue(binExpr.Right)
                 };
+            }
+
+            return null;
+        }
+
+        private static object GetExpressionValue(Expression expr)
+        {
+            ConstantExpression con = expr as ConstantExpression;
+            if (con != null)
+                return con.Value;
+
+            MemberExpression mem = expr as MemberExpression;
+            if (mem != null)
+            {
+                if (mem.Type == typeof(int))
+                    return Expression.Lambda<Func<int>>(mem).Compile()();
+                else if (mem.Type == typeof(double))
+                    return Expression.Lambda<Func<double>>(mem).Compile()();
+                else if (mem.Type == typeof(float))
+                    return Expression.Lambda<Func<float>>(mem).Compile()();
+                else if (mem.Type == typeof(decimal))
+                    return Expression.Lambda<Func<decimal>>(mem).Compile()();
+                else if (mem.Type == typeof(long))
+                    return Expression.Lambda<Func<long>>(mem).Compile()();
+                else if (mem.Type == typeof(string))
+                    return Expression.Lambda<Func<string>>(mem).Compile()();
+                else
+                    return Expression.Lambda<Func<object>>(mem).Compile()();
             }
 
             return null;

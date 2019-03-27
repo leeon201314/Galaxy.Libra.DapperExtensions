@@ -77,7 +77,9 @@ namespace Galaxy.Libra.DapperExtensions.DBBuilder.MySQL
             foreach (PropertyInfo pro in properties)
             {
                 IPropertyMap propertyMap = classMap.Properties.SingleOrDefault(p => p.Name.Equals(pro.Name, StringComparison.InvariantCultureIgnoreCase));
-                InitColumn(pro, propertyMap);
+
+                if (!propertyMap.Ignored)
+                    InitColumn(pro, propertyMap);
             }
         }
 

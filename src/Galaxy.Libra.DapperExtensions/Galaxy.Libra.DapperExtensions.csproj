@@ -1,13 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Authors>leeon</Authors>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>liuweizzuie</Authors>
     <Description>一个轻量的dapper扩展库</Description>
     <Copyright>leeon</Copyright>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
-    <Version>1.0.5</Version>
+    <AssemblyVersion>1.0.0.8</AssemblyVersion>
+    <FileVersion>1.0.0.8</FileVersion>
+    <Version>1.0.8</Version>
+    <PackageId>Snowing.DapperExtensions</PackageId>
+    <Product>Snowing.DapperExtensions</Product>
+    <AssemblyName>Snowing.DapperExtensions</AssemblyName>
+    <PackageProjectUrl>https://github.com/liuweizzuie/Galaxy.Libra.DapperExtensions</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
   </ItemGroup>
 
 </Project>

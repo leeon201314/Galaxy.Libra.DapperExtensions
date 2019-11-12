@@ -4,15 +4,15 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Leeon</authors>
-    <owners>Leeon</owners>
+    <authors>liuweizzuie</authors>
+    <owners>liuweizzuie</owners>
     <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <projectUrl>https://github.com/liuweizzuie/Galaxy.Libra.DapperExtensions</projectUrl>
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>a small library that complements Dapper by adding basic CRUD operations (Get, Insert, Update, Delete) for your POCOs.</description>
+    <description>DapperExtions based on [Galaxy.Libra.DapperExtensions](https://github.com/liuweizzuie/Galaxy.Libra.DapperExtensions), to avoid name confict ,  I rename it to Snowing.DapperExtensions</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright 2019</copyright>
-    <tags>Tag1 Tag2</tags>
+    <tags>DapperExtensions Snowing</tags>
   </metadata>
 </package>

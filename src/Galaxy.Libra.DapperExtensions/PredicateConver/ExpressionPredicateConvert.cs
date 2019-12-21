@@ -113,6 +113,12 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
                     return Expression.Lambda<Func<long>>(mem).Compile()();
                 else if (mem.Type == typeof(string))
                     return Expression.Lambda<Func<string>>(mem).Compile()();
+                else if (mem.Type == typeof(int))
+                    return Expression.Lambda<Func<int>>(mem).Compile()();
+                else if (mem.Type == typeof(uint))
+                    return Expression.Lambda<Func<uint>>(mem).Compile()();
+                else if (mem.Type == typeof(ulong))
+                    return Expression.Lambda<Func<ulong>>(mem).Compile()();
                 else
                     return Expression.Lambda<Func<object>>(mem).Compile()();
             }

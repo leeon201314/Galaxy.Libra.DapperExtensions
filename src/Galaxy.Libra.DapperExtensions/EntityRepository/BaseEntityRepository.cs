@@ -60,6 +60,16 @@ namespace Galaxy.Libra.DapperExtensions.EntityRepository
         /// <returns></returns>
         public virtual int Count(Expression<Func<T, bool>> expression) => Execute(() => curDbConnection.Count<T>(expression));
 
+        public dynamic Max(Expression<Func<T, object>> maxExp, Expression<Func<T, bool>> expression)
+        {
+            return Execute(() => curDbConnection.Max<T>(maxExp, expression));
+        }
+
+        public dynamic Max(Expression<Func<T, object>> maxExp, object predicate = null)
+        {
+            return Execute(() => curDbConnection.Max<T>(maxExp, predicate));
+        }
+
         private R Execute<R>(Func<R> fun)
         {
             if (curDbConnection != null && fun != null)
@@ -94,5 +104,7 @@ namespace Galaxy.Libra.DapperExtensions.EntityRepository
                 }
             }
         }
+
+        
     }
 }

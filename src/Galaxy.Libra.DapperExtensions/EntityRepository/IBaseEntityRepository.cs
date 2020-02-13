@@ -46,5 +46,9 @@ namespace Galaxy.Libra.DapperExtensions.EntityRepository
         int Count(object predicate = null);
 
         int Count(Expression<Func<T, bool>> expression);
+
+        dynamic Max(Expression<Func<T, object>> maxExp, Expression<Func<T, bool>> expression);
+
+        dynamic Max(Expression<Func<T, object>> maxExp, object predicate = null);
     }
 }

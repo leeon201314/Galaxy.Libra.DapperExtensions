@@ -17,6 +17,12 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
             return ConvertToPredicate<T>(expr);
         }
 
+        public static string PropertyName<T>(Expression<Func<T, object>> expression)
+        {
+            MemberExpression exp = expression.Body as MemberExpression;
+            return exp.Member.Name;
+        }
+
         private static IPredicate ConvertToPredicate<T>(Expression expr) where T : class
         {
             if (expr.NodeType == ExpressionType.OrElse || expr.NodeType == ExpressionType.AndAlso)

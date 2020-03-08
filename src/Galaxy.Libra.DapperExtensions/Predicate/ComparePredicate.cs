@@ -71,6 +71,10 @@
         /// <summary>
         /// Like (You can use % in the value to do wilcard searching)
         /// </summary>
-        Like
+        Like,
+
+        In,
+
+        Between
     }
 }

@@ -5,9 +5,9 @@
     <Authors>liuweizzuie</Authors>
     <Description>一个轻量的dapper扩展库</Description>
     <Copyright>leeon</Copyright>
-    <AssemblyVersion>1.0.0.15</AssemblyVersion>
-    <FileVersion>1.0.0.15</FileVersion>
-    <Version>1.0.0.15</Version>
+    <AssemblyVersion>1.0.0.24</AssemblyVersion>
+    <FileVersion>1.0.0.24</FileVersion>
+    <Version>1.0.0.24</Version>
     <PackageId>Snowing.DapperExtensions</PackageId>
     <Product>Snowing.DapperExtensions</Product>
     <AssemblyName>Snowing.DapperExtensions</AssemblyName>
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.30" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 
 </Project>

@@ -257,6 +257,16 @@ namespace Galaxy.Libra.DapperExtensions
             return Instance.Max<T>(connection, maxExp, expression, transaction, commandTimeout);
         }
 
+        public static dynamic Sum<T>(this IDbConnection connection, Expression<Func<T, object>> maxExp, object predicate, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            return Instance.Sum<T>(connection, maxExp, predicate, transaction, commandTimeout);
+        }
+
+        public static dynamic Sum<T>(this IDbConnection connection, Expression<Func<T, object>> maxExp, Expression<Func<T, bool>> expression, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            return Instance.Sum<T>(connection, maxExp, expression, transaction, commandTimeout);
+        }
+
         /// <summary>
         /// Executes a select query for multiple objects, returning IMultipleResultReader for each predicate.
         /// </summary>

@@ -30,6 +30,11 @@ namespace Galaxy.Libra.DapperExtensions.DapperImpl
 
         dynamic Max<T>(IDbConnection connection, Expression<Func<T, object>> expMax, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
 
+        dynamic Sum<T>(IDbConnection connection, Expression<Func<T, object>> expMax, Expression<Func<T, bool>> expression, IDbTransaction transaction, int? commandTimeout) where T : class;
+
+        dynamic Sum<T>(IDbConnection connection, Expression<Func<T, object>> expMax, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
+
+
         IMultipleResultReader GetMultiple(IDbConnection connection, GetMultiplePredicate predicate, IDbTransaction transaction, int? commandTimeout);
     }
 }

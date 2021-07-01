@@ -70,6 +70,16 @@ namespace Galaxy.Libra.DapperExtensions.EntityRepository
             return Execute(() => curDbConnection.Max<T>(maxExp, predicate));
         }
 
+        public dynamic Sum(Expression<Func<T, object>> maxExp, Expression<Func<T, bool>> expression)
+        {
+            return Execute(() => curDbConnection.Sum<T>(maxExp, expression));
+        }
+
+        public dynamic Sum(Expression<Func<T, object>> maxExp, object predicate = null)
+        {
+            return Execute(() => curDbConnection.Sum<T>(maxExp, predicate));
+        }
+
         private R Execute<R>(Func<R> fun)
         {
             if (curDbConnection != null && fun != null)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Galaxy.Libra.DapperExtensions.PredicateConver
 {
@@ -20,11 +21,19 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
         public static string PropertyName<T>(Expression<Func<T, object>> expression)
         {
             MemberExpression exp = expression.Body as MemberExpression;
+            if(exp == null)
+            {
+                string xxpName = expression.Body.GetType().GetProperty("Operand").GetValue(expression.Body).ToString();
+                System.Console.WriteLine(xxpName);
+                return xxpName.Split('.')[1];
+                
+            }
             return exp.Member.Name;
         }
 
         private static IPredicate ConvertToPredicate<T>(Expression expr) where T : class
         {
+
             if (expr.NodeType == ExpressionType.OrElse || expr.NodeType == ExpressionType.AndAlso)
             {
                 BinaryExpression binExpr = expr as BinaryExpression;

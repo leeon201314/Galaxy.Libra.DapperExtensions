@@ -29,6 +29,9 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         bool IsAutoIncrement { get; }
 
         KeyType KeyType { get; }
+
+        IdentityType IdentityType { get; }
+
         PropertyInfo PropertyInfo { get; }
     }
 
@@ -60,6 +63,11 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         /// Gets the key type for the current property.
         /// </summary>
         public KeyType KeyType { get; private set; }
+
+        /// <summary>
+        /// If the KeyType is Identity, used to specified the valued-type.
+        /// </summary>
+        public IdentityType IdentityType { get; private set; }
 
         /// <summary>
         /// Gets the ignore status of the current property. If ignored, the current property will not be included in queries.
@@ -188,6 +196,17 @@ namespace Galaxy.Libra.DapperExtensions.Mapper
         /// <summary>
         /// The property is a key that is not automatically managed.
         /// </summary>
-        Assigned
+        Assigned,
+    }
+
+    public enum IdentityType
+    {
+        Int32,
+
+        UInt32,
+
+        Int64,
+
+        Int64Unsigned,
     }
 }

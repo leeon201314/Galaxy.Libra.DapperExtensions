@@ -16,6 +16,11 @@ namespace Galaxy.Libra.DapperExtensions.Sql
         string SelectSet(IClassMapper classMap, IPredicate predicate, IList<ISort> sort, int firstResult, int maxResults, IDictionary<string, object> parameters);
         string Count(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters);
 
+        string Max(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters, string maxProperty);
+
+        string Sum(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters, string sumProperty);
+
+
         string Insert(IClassMapper classMap);
         string Update(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters);
         string Delete(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters);
@@ -137,7 +142,53 @@ namespace Galaxy.Libra.DapperExtensions.Sql
 
             return sql.ToString();
         }
-        
+
+        public virtual string Max(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters, string maxProperty)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException("Parameters");
+            }
+
+            string column = GetColumnName(classMap, maxProperty, false);
+
+            StringBuilder sql = new StringBuilder(string.Format("SELECT Max({0}) AS {1}Max{2} FROM {3}",
+                                column,
+                                Configuration.Dialect.OpenQuote,
+                                Configuration.Dialect.CloseQuote,
+                                GetTableName(classMap)));
+            if (predicate != null)
+            {
+                sql.Append(" WHERE ")
+                    .Append(predicate.GetSql(this, parameters));
+            }
+
+            return sql.ToString();
+        }
+
+        public virtual string Sum(IClassMapper classMap, IPredicate predicate, IDictionary<string, object> parameters, string sumProperty)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException("Parameters");
+            }
+
+            string column = GetColumnName(classMap, sumProperty, false);
+
+            StringBuilder sql = new StringBuilder(string.Format("SELECT Sum({0}) AS {1}Sum{2} FROM {3}",
+                                column,
+                                Configuration.Dialect.OpenQuote,
+                                Configuration.Dialect.CloseQuote,
+                                GetTableName(classMap)));
+            if (predicate != null)
+            {
+                sql.Append(" WHERE ")
+                    .Append(predicate.GetSql(this, parameters));
+            }
+
+            return sql.ToString();
+        }
+
         public virtual string Insert(IClassMapper classMap)
         {
             var columns = classMap.Properties.Where(p => !(p.Ignored || p.IsReadOnly || p.KeyType == KeyType.Identity));
@@ -248,5 +299,7 @@ namespace Galaxy.Libra.DapperExtensions.Sql
                 .Select(p => GetColumnName(classMap, p, true));
             return columns.AppendStrings();
         }
+
+
     }
 }

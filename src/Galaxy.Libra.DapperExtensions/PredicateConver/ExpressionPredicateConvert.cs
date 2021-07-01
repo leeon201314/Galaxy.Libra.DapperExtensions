@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Galaxy.Libra.DapperExtensions.PredicateConver
 {
@@ -17,8 +18,22 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
             return ConvertToPredicate<T>(expr);
         }
 
+        public static string PropertyName<T>(Expression<Func<T, object>> expression)
+        {
+            MemberExpression exp = expression.Body as MemberExpression;
+            if(exp == null)
+            {
+                string xxpName = expression.Body.GetType().GetProperty("Operand").GetValue(expression.Body).ToString();
+                System.Console.WriteLine(xxpName);
+                return xxpName.Split('.')[1];
+                
+            }
+            return exp.Member.Name;
+        }
+
         private static IPredicate ConvertToPredicate<T>(Expression expr) where T : class
         {
+
             if (expr.NodeType == ExpressionType.OrElse || expr.NodeType == ExpressionType.AndAlso)
             {
                 BinaryExpression binExpr = expr as BinaryExpression;
@@ -113,6 +128,12 @@ namespace Galaxy.Libra.DapperExtensions.PredicateConver
                     return Expression.Lambda<Func<long>>(mem).Compile()();
                 else if (mem.Type == typeof(string))
                     return Expression.Lambda<Func<string>>(mem).Compile()();
+                else if (mem.Type == typeof(int))
+                    return Expression.Lambda<Func<int>>(mem).Compile()();
+                else if (mem.Type == typeof(uint))
+                    return Expression.Lambda<Func<uint>>(mem).Compile()();
+                else if (mem.Type == typeof(ulong))
+                    return Expression.Lambda<Func<ulong>>(mem).Compile()();
                 else
                     return Expression.Lambda<Func<object>>(mem).Compile()();
             }

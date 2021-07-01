@@ -64,7 +64,24 @@ namespace Galaxy.Libra.DapperExtensions.DapperImpl
                 }
 
                 long identityValue = result.First();
-                int identityInt = Convert.ToInt32(identityValue);
+                dynamic identityInt = 0;
+                switch (identityColumn.IdentityType)
+                {
+                    case IdentityType.Int32:
+                        identityInt = Convert.ToInt32(identityValue);
+                        break;
+                    case IdentityType.UInt32:
+                        identityInt = Convert.ToUInt32(identityValue);
+                        break;
+                    case IdentityType.Int64:
+                        identityInt = Convert.ToInt64(identityValue);
+                        break;
+                    case IdentityType.Int64Unsigned:
+                        identityInt = Convert.ToUInt64(identityValue);
+                        break;
+                    default:
+                        break;
+                }
                 keyValues.Add(identityColumn.Name, identityInt);
                 identityColumn.PropertyInfo.SetValue(entity, identityInt, null);
             }
